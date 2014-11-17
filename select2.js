@@ -1989,10 +1989,6 @@ the specific language governing permissions and limitations under the Apache Lic
         opening: function () {
             var el, range, len;
 
-            if (this.opts.minimumResultsForSearch >= 0) {
-                this.showSearch(true);
-            }
-
             this.parent.opening.apply(this, arguments);
 
             if (this.showSearchInput !== false) {
@@ -2090,12 +2086,8 @@ the specific language governing permissions and limitations under the Apache Lic
                 idSuffix = nextUid(),
                 elementLabel;
 
-            if (this.opts.minimumResultsForSearch < 0) {
-                this.showSearch(false);
-            } else {
-                this.showSearch(true);
-            }
-
+            this.showSearch(false);
+            
             this.selection = selection = container.find(".select2-choice");
 
             this.focusser = container.find(".select2-focusser");
@@ -2206,14 +2198,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
 
             installKeyUpChangeEvent(this.focusser);
-            this.focusser.on("keyup-change input", this.bind(function(e) {
-                if (this.opts.minimumResultsForSearch >= 0) {
-                    e.stopPropagation();
-                    if (this.opened()) return;
-                    this.open();
-                }
-            }));
-
+            
             selection.on("mousedown touchstart", "abbr", this.bind(function (e) {
                 if (!this.isInterfaceEnabled()) {
                     return;
@@ -2420,14 +2405,6 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
             }
 
-            // hide the search box if this is the first we got the results and there are enough of them for search
-
-            if (initial === true) {
-                var min = this.opts.minimumResultsForSearch;
-                if (min >= 0) {
-                    this.showSearch(countResults(data.results) >= min);
-                }
-            }
         },
 
         // single
@@ -3488,12 +3465,8 @@ the specific language governing permissions and limitations under the Apache Lic
                 return true;
             }
 
-            // Never focus the input if search is disabled
-            if (instance.opts.minimumResultsForSearch < 0) {
-                return false;
-            }
-
-            return true;
+            // Never focus the input because search is disabled
+            return false;
         }
     };
 
